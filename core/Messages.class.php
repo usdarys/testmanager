@@ -36,4 +36,22 @@ class Messages {
 		$nwar = 0;
 		$ninf = 0;
 	}
+
+	public function getErrors() {
+		return array_filter($this->m, function ($el) {
+			return $el->isError();
+		});
+	}
+
+	public function getInfos() {
+		return array_filter($this->m, function ($el) {
+			return $el->isInfo();
+		});
+	}
+
+	public function getWarnings() {
+		return array_filter($this->m, function ($el) {
+			return $el->isWarning();
+		});
+	}
 }

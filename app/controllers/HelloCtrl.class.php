@@ -21,7 +21,7 @@ class HelloCtrl {
         Utils::addInfoMessage("Or even easier message :-)");
         
         App::getSmarty()->assign("value",$variable);        
-        App::getSmarty()->display("Hello.tpl");
+        App::getSmarty()->display("hello.tpl");
         
     }
     
