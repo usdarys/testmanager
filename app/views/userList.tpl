@@ -6,7 +6,7 @@
         {include file="messages.tpl"}
         <ul class="nav mb-3 mt-3">
             <li class="nav-item">
-                <a href="{url action="userCreate"}" class="btn btn-success">Dodaj</a>
+                <a href="{url action="userSave"}" class="btn btn-success">Dodaj</a>
             </li>
         </ul>
         <table class="table table-striped align-middle">
@@ -27,8 +27,8 @@
                 <td>{$user["first_name"]}</td>
                 <td>{$user["last_name"]}</td>
                 <td class="d-flex justify-content-end">
-                    <a href="{url action="userUpdate"}" class="btn btn-sm btn-outline-secondary me-2">Edytuj</a>
-                    <a href="{url action="userDelete"}" class="btn btn-sm btn-outline-danger">Usuń</a>
+                    <a href="{url action="userUpdate" id=$user["id"]}" class="btn btn-sm btn-outline-secondary me-2">Edytuj</a>
+                    <a href="{url action="userDelete" id=$user["id"]}" class="btn btn-sm btn-outline-danger">Usuń</a>
                 </td>
             </tr>
         {/foreach}
