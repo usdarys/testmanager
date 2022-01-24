@@ -2,7 +2,7 @@
 
 {block name=main}
 	<div class="container d-flex justify-content-center credit-calc-form flex-column">
-        <h5 class="border-bottom mb-3 mt-3">Dodawanie użytkownika</h5>
+        <h4 class="border-bottom mb-3 mt-3">Dodawanie użytkownika</h4>
         <form action="{url action="userCreate"}"  method="post" class="mb-3">
             <div class="mb-3">
                 <label for="login_id" class="form-label">Login</label>
@@ -21,7 +21,7 @@
                 <input type="password" class="form-control" id="password_id" name="password">
             </div>
             <div class="mb-4">
-            <div class="mb-1">Role:</div>
+            <div class="mb-1">Rola:</div>
             {foreach $roles as $role}
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="{$role}" id="{$role}" name="role_{$role}">
