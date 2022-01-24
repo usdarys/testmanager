@@ -39,17 +39,21 @@ class UserCtrl {
             'validator_message' => "Nieprawidłowy login. Login powinien zaczynac się od litery i składać z 3 - 20 liter lub cyfr"
         ]);
 
-        if (empty($this->form->id)) {
-            $isLoginUsed = App::getDB()->has("user_account", [
-                "login" => $this->form->login
-            ]);
-        } else {
-            $isLoginUsed = App::getDB()->has("user_account", [
-                "AND" => [
-                    "login" => $this->form->login,
-                    "id[!]" => $this->form->id
-                ]
-            ]);
+        try {
+            if (empty($this->form->id)) {
+                $isLoginUsed = App::getDB()->has("user_account", [
+                    "login" => $this->form->login
+                ]);
+            } else {
+                $isLoginUsed = App::getDB()->has("user_account", [
+                    "AND" => [
+                        "login" => $this->form->login,
+                        "id[!]" => $this->form->id
+                    ]
+                ]);
+            }
+        } catch (\PDOException $e) {
+            Utils::addErrorMessage("Błąd walidacji loginu " . $e->getMessage());
         }
 
         if ($isLoginUsed) {
@@ -59,7 +63,7 @@ class UserCtrl {
         $this->form->firstName = $v->validate($this->form->firstName, [
             'required' => true,
             'required_message' => "Imie jest wymagane",
-            'regexp' => '/^[A-Za-z]+$/',
+            'regexp' => '/^[A-Za-z\cx]+$/',
             'max_length' => 30,
             'validator_message' => "Nieprawidłowe imie"
         ]);
@@ -67,7 +71,7 @@ class UserCtrl {
         $this->form->lastName = $v->validate($this->form->lastName, [
             'required' => true,
             'required_message' => "Nazwisko jest wymagane",
-            'regexp' => '/^[A-Za-z]+$/',
+            'regexp' => '/^[A-Za-z\cx]+$/',
             'max_length' => 30,
             'validator_message' => "Nieprawidłowe nazwisko"
         ]);
@@ -98,19 +102,10 @@ class UserCtrl {
                     "password" => $this->form->password
                 ]);
 
-                $userId = App::getDB()->id();
-
-                if (!empty($this->form->roles)) {
-                    foreach ($this->form->roles as $r => $val) {
-                        App::getDB()->query('
-                            INSERT INTO user_account_role (user_account_id, role_id) 
-                            VALUES (' . $userId . ', (SELECT id FROM role WHERE name = \'' . $val . '\'));
-                        ');
-                    }
-                }
-
+                $this->form->id = App::getDB()->id();
+                $this->saveRoles();
                 Utils::addInfoMessage("Dodano użytkownika");
-            } else {
+            } else {            
                 App::getDB()->update("user_account", [
                     "login" => $this->form->login,
                     "first_name" => $this->form->firstName,
@@ -120,6 +115,7 @@ class UserCtrl {
                     "id" => $this->form->id
                 ]);
 
+                $this->saveRoles();
                 Utils::addInfoMessage("Zapisano użytkownika");
             }
             App::getRouter()->forwardTo("userList");
@@ -128,17 +124,21 @@ class UserCtrl {
         $this->generateFormView();
     }
 
-    public function action_userUpdate() {
-        $v = new Validator();
-        $id = $v->validateFromCleanURL(1, [
-            "required" => true,
-            "required_message" => "Brak id",
-            "int" => true,
-            "min" => 1,
-            "validator_message" => "Nieprawidlowe id"
-        ]);
+    private function saveRoles() {
+        if (!empty($this->form->roles)) {
+            foreach ($this->form->roles as $r => $val) {
+                App::getDB()->query('
+                    INSERT INTO user_account_role (user_account_id, role_id) 
+                    VALUES (' . $this->form->id . ', (SELECT id FROM role WHERE name = \'' . $val . '\'));
+                ');
+            }
+        }        
+    }
 
-        if ($v->isLastOK()) {
+    public function action_userUpdate() {
+        $id = $this->getResourceId();
+
+        if ($id) {
             try {
                 $user = App::getDB()->get("user_account", "*", [
                     "id" => $id
@@ -148,8 +148,17 @@ class UserCtrl {
                 $this->form->firstName = $user["first_name"];
                 $this->form->lastName = $user["last_name"];
                 $this->form->password = $user["password"];
+                $this->form->roles = App::getDB()->select("role", [
+                        "[><]user_account_role" => ["id" => "role_id"]
+                    ], [
+                        "role.name"
+                    ], [
+                        "user_account_id" => $this->form->$id
+                    ]
+                );
+
             } catch (\PDOException $e) {
-                Utils::addErrorMessage("Błąd podczas pobierania danych uzytkownika. " . $e->getMessage());
+                Utils::addErrorMessage("Błąd podczas pobierania danych uzytkownika do edycji " . $e->getMessage());
             }
 
             $this->generateFormView();
@@ -157,16 +166,9 @@ class UserCtrl {
     }
 
     public function action_userDelete() { 
-        $v = new Validator();
-        $id = $v->validateFromCleanURL(1, [
-            "required" => true,
-            "required_message" => "Brak id",
-            "int" => true,
-            "min" => 1,
-            "validator_message" => "Nieprawidlowe id"
-        ]);
+        $id = $this->getResourceId();
 
-        if ($v->isLastOK()) {
+        if ($id) {
             try {
                 App::getDB()->pdo->beginTransaction();
 
@@ -185,11 +187,26 @@ class UserCtrl {
             }
 
             if (!App::getMessages()->isError()) {
-                Utils::addInfoMessage("Usunieto użytkownika");
+                Utils::addInfoMessage("Usunięto użytkownika");
             } 
         }
 
         App::getRouter()->forwardTo("userList");
+    }
+
+    private function getResourceId() {
+        $v = new Validator();
+        $id = $v->validateFromCleanURL(1, [
+            "required" => true,
+            "required_message" => "Brak id",
+            "int" => true,
+            "min" => 1,
+            "validator_message" => "Nieprawidlowe id"
+        ]);
+        if ($v->isLastOK()) {
+            return $id;
+        }
+        return;
     }
 
     private function generateFormView() {
@@ -205,12 +222,16 @@ class UserCtrl {
     }
 
     public function action_userList() {
-        $userList = App::getDB()->select("user_account", [
-            "id",
-            "login",
-            "first_name",
-            "last_name"   
-        ]);
+        try {
+            $userList = App::getDB()->select("user_account", [
+                "id",
+                "login",
+                "first_name",
+                "last_name"   
+            ]);
+        } catch (\PDOException $e) {
+            Utils::addErrorMessage("Błąd pobierania listy uzytkownikow " . $e->getMessage());
+        }
 
         App::getSmarty()->assign('userList', $userList);
         App::getSmarty()->display('userList.tpl');

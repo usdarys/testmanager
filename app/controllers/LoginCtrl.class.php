@@ -18,7 +18,7 @@ class LoginCtrl {
 
     public function action_login() {
         if ($this->validateForm()) {
-            $user = App::getDB()->select("user_account", "id", [
+            $user = App::getDB()->get("user_account", "*", [
                 "AND" => [
                     "login" => $this->form->login,
                     "password" => $this->form->password
@@ -31,7 +31,7 @@ class LoginCtrl {
                     ], [
                         "role.name"
                     ], [
-                        "user_account_id" => $user[0]
+                        "user_account_id" => $user["id"]
                     ]
                 );
 

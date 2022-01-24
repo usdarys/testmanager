@@ -25,7 +25,7 @@
             <div class="mb-1">Rola:</div>
             {foreach $roles as $role}
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="{$role}" id="{$role}" name="role_{$role}">
+                    <input class="form-check-input" type="checkbox" value="{$role}" id="{$role}" name="role_{$role}" {if in_array($role, $form->roles)}checked{/if}>
                     <label class="form-check-label" for="{$role}">{$role}</label>
                 </div>
             {/foreach}

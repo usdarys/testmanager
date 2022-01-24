@@ -9,6 +9,6 @@ class UserForm {
     public $firstName;
     public $lastName;
     public $password;
-    public $isNew;
+    public $roles = array();
 
 }
