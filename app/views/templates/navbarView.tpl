@@ -13,7 +13,7 @@
 				</li>
 				{if \core\RoleUtils::inRole("Admin")} 
 					<li class="nav-item">
-						<a class="nav-link" href="{url action="userList"}">Uzytkownicy</a>
+						<a class="nav-link" href="{url action="userList"}">Użytkownicy</a>
 					</li>
 				{/if}
 			</ul>
@@ -25,12 +25,3 @@
     {block name=main}{/block}
 </main>
 {/block}
-
-
-{* <nav class="navbar bg-light border-bottom d-flex justify-content-between mb-3">
-	<div>
-		<a href="{url action="hello"}" class="btn btn-link">Hello</a>
-		{if \core\RoleUtils::inRole("Admin")} <a href="{url action="userList"}" class="btn btn-link">Uzytkownicy</a>{/if}
-	</div>
-	<a href="{url action="logout"}" class="btn btn-link me-3">Wyloguj</a>
-</nav> *}

@@ -28,7 +28,7 @@
 				{/foreach}
 			{/if}
 
-			<input type="submit" value="Zaloguj" class="btn btn-primary btn-lg w-100 mt-2"/>
+			<input type="submit" value="Zaloguj" class="btn btn-success btn-lg w-100 mt-2"/>
 		</form>	
 	</div>	
 </main>

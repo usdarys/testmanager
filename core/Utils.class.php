@@ -78,4 +78,14 @@ class Utils {
         return App::getConf()->action_root . self::_url_maker_noclean($action, $params);
     }
 
+    public static function preg_grep_keys($pattern, $input, $flags = 0) {
+        return array_intersect_key(
+            $input,
+            array_flip(preg_grep(
+               $pattern,
+               array_keys($input),
+               $flags
+            ))
+        );
+    }
 }
