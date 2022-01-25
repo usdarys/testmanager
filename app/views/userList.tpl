@@ -8,6 +8,12 @@
             <li class="nav-item">
                 <a href="{url action="userSave"}" class="btn btn-success">Dodaj</a>
             </li>
+            <li>
+                <form class="d-flex ms-3" action="{url action="userList"}" method="POST" >
+                    <input class="form-control me-2" type="search" name="search" aria-label="Search" value="{$search}">
+                    <button class="btn btn-outline-success btn-sm" type="submit">Szukaj</button>
+                </form>
+            </li>
         </ul>
         <table class="table table-striped align-middle">
         <thead>

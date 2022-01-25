@@ -250,19 +250,29 @@ class UserCtrl {
     }
 
     public function action_userList() {
+
+        $search = ParamUtils::getFromPost("search");
+        $where["ORDER"] = "id";
+        if (isset($search) && strlen($search) > 0) {
+            $where["OR"] = [
+                "login[~]" => $search,
+                "first_name[~]" => $search,
+                "last_name[~]" => $search
+            ];
+        }
+
         try {
             $userList = App::getDB()->select("user_account", [
                 "id",
                 "login",
                 "first_name",
                 "last_name"   
-            ], [
-                "ORDER" => "id"
-            ]);
+            ], $where);
         } catch (\PDOException $e) {
             Utils::addErrorMessage("Błąd pobierania listy uzytkownikow " . $e->getMessage());
         }
 
+        App::getSmarty()->assign('search', $search);
         App::getSmarty()->assign('userList', $userList);
         App::getSmarty()->display('userList.tpl');
     }
