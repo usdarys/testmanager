@@ -2,15 +2,15 @@
 -- Structure
 CREATE TABLE user_account (
     id serial PRIMARY KEY,
-    login VARCHAR(255) NOT NULL UNIQUE,
-    first_name VARCHAR(255) NOT NULL,
-    last_name VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
+    login TEXT NOT NULL UNIQUE,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    password TEXT NOT NULL
 );
 
 CREATE TABLE role (
     id serial PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE
+    name TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE user_account_role (
@@ -19,6 +19,33 @@ CREATE TABLE user_account_role (
     FOREIGN KEY (user_account_id) REFERENCES user_account(id),
     FOREIGN KEY (role_id) REFERENCES role(id),
     PRIMARY KEY (user_account_id, role_id)
+);
+
+CREATE TABLE test_case (
+    id serial PRIMARY KEY,
+    name TEXT,
+    preconditions TEXT,
+    steps TEXT,
+    expected_result TEXT
+);
+
+CREATE TABLE test_run (
+    id serial PRIMARY KEY,
+    name TEXT,
+    description TEXT
+);
+
+CREATE TABLE test_result (
+    test_run_id INT,
+    test_case_id INT,
+    user_account_id INT,
+    date_run TIMESTAMP,
+    status TEXT,
+    comment TEXT,
+    FOREIGN KEY (test_run_id) REFERENCES test_run(id),
+    FOREIGN KEY (test_case_id) REFERENCES test_case(id),
+    FOREIGN KEY (user_account_id) REFERENCES user_account(id),
+    PRIMARY KEY (test_run_id, test_case_id)
 );
 
 

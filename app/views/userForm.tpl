@@ -2,7 +2,7 @@
 
 {block name=main}
 	<div class="container d-flex justify-content-center credit-calc-form flex-column">
-<h4 class="border-bottom mb-3 mt-3">{if empty($form->id)}Dodawanie{else}Edycja{/if} użytkownika</h4>
+        <h4 class="border-bottom mb-3 mt-3">{if empty($form->id)}Dodawanie{else}Edycja{/if} użytkownika</h4>
         <form action="{url action="userSave"}"  method="post" class="mb-3">
             <input type="hidden" name="id" value="{$form->id}">
             <div class="mb-3">
@@ -31,7 +31,7 @@
                 </div>
             {/foreach}
             </div>
-        <input type="submit" value="{if empty($form->id)}Dodaj{else}Zapisz{/if} użytkownika" class="btn btn-success">
+            <input type="submit" value="{if empty($form->id)}Dodaj{else}Zapisz{/if} użytkownika" class="btn btn-success">
             <a href="{url action="userList"}" class="btn btn-outline-danger">Anuluj</a>
         </form>
         {include file="messages.tpl"}

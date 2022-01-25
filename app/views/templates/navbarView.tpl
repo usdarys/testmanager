@@ -11,6 +11,9 @@
 				<li class="nav-item">
 					<a href="{url action="hello"}" class="nav-link">Hello</a>
 				</li>
+				<li class="nav-item">
+					<a href="{url action="testCaseList"}" class="nav-link">Przypadki testowe</a>
+				</li>
 				{if \core\RoleUtils::inRole("Admin")} 
 					<li class="nav-item">
 						<a class="nav-link" href="{url action="userList"}">Użytkownicy</a>
