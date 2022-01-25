@@ -7,6 +7,7 @@ use core\Utils;
 use core\ParamUtils;
 use app\forms\UserForm;
 use core\Validator;
+use core\ArrayUtils;
 
 class UserCtrl {
 
@@ -22,7 +23,7 @@ class UserCtrl {
         $this->form->firstName = ParamUtils::getFromPost('first_name');
         $this->form->lastName = ParamUtils::getFromPost('last_name');
         $this->form->password = ParamUtils::getFromPost('password');
-        $this->form->roles = Utils::preg_grep_keys('/^role_/', $_POST);
+        $this->form->roles = ArrayUtils::preg_grep_keys('/^role_/', $_POST);
 
         if (!isset($this->form->login) || !isset($this->form->password) || !isset($this->form->firstName) || !isset($this->form->lastName)) {
             return false;
@@ -63,15 +64,15 @@ class UserCtrl {
         $this->form->firstName = $v->validate($this->form->firstName, [
             'required' => true,
             'required_message' => "Imie jest wymagane",
-            'regexp' => '/^[A-Za-z\cx]+$/',
+            'regexp' => '/^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/',
             'max_length' => 30,
             'validator_message' => "Nieprawidłowe imie"
         ]);
-
+        
         $this->form->lastName = $v->validate($this->form->lastName, [
             'required' => true,
             'required_message' => "Nazwisko jest wymagane",
-            'regexp' => '/^[A-Za-z\cx]+$/',
+            'regexp' => '/^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ-]+$/',
             'max_length' => 30,
             'validator_message' => "Nieprawidłowe nazwisko"
         ]);
@@ -94,29 +95,45 @@ class UserCtrl {
 
     public function action_userSave() {
         if ($this->validateForm()) {
-            if (empty($this->form->id)) {
-                App::getDB()->insert("user_account", [
-                    "login" => $this->form->login,
-                    "first_name" => $this->form->firstName,
-                    "last_name" => $this->form->lastName,
-                    "password" => $this->form->password
-                ]);
+            try {
+                App::getDB()->pdo->beginTransaction();
 
-                $this->form->id = App::getDB()->id();
-                $this->saveRoles();
-                Utils::addInfoMessage("Dodano użytkownika");
-            } else {            
-                App::getDB()->update("user_account", [
-                    "login" => $this->form->login,
-                    "first_name" => $this->form->firstName,
-                    "last_name" => $this->form->lastName,
-                    "password" => $this->form->password
-                ], [
-                    "id" => $this->form->id
-                ]);
-
-                $this->saveRoles();
-                Utils::addInfoMessage("Zapisano użytkownika");
+                if (empty($this->form->id)) {
+                    App::getDB()->insert("user_account", [
+                        "login" => $this->form->login,
+                        "first_name" => $this->form->firstName,
+                        "last_name" => $this->form->lastName,
+                        "password" => $this->form->password
+                    ]);
+    
+                    $this->form->id = App::getDB()->id();
+                    $this->saveRoles();
+                    Utils::addInfoMessage("Dodano użytkownika");
+                } else {     
+                    if ($this->form->login == "superadmin") {    
+                        App::getDB()->update("user_account", [
+                            "password" => $this->form->password
+                        ], [
+                            "id" => $this->form->id
+                        ]);                    
+                    } else {
+                        App::getDB()->update("user_account", [
+                            "login" => $this->form->login,
+                            "first_name" => $this->form->firstName,
+                            "last_name" => $this->form->lastName,
+                            "password" => $this->form->password
+                        ], [
+                            "id" => $this->form->id
+                        ]);
+                    }
+    
+                    $this->saveRoles();
+                    Utils::addInfoMessage("Zapisano użytkownika");
+                }
+                App::getDB()->pdo->commit();
+            } catch (\PDOException $e) {
+                App::getDB()->pdo->rollBack();
+                Utils::addErrorMessage("Błąd zapisu danych uzytkownika " . $e->getMessage());
             }
             App::getRouter()->forwardTo("userList");
         }
@@ -125,6 +142,10 @@ class UserCtrl {
     }
 
     private function saveRoles() {
+        App::getDB()->delete("user_account_role", [
+            "user_account_id" => $this->form->id
+        ]);
+
         if (!empty($this->form->roles)) {
             foreach ($this->form->roles as $r => $val) {
                 App::getDB()->query('
@@ -148,14 +169,14 @@ class UserCtrl {
                 $this->form->firstName = $user["first_name"];
                 $this->form->lastName = $user["last_name"];
                 $this->form->password = $user["password"];
-                $this->form->roles = App::getDB()->select("role", [
+                $this->form->roles = ArrayUtils::flatten(App::getDB()->select("role", [
                         "[><]user_account_role" => ["id" => "role_id"]
                     ], [
                         "role.name"
                     ], [
-                        "user_account_id" => $this->form->$id
+                        "user_account_id" => $this->form->id
                     ]
-                );
+                ));
 
             } catch (\PDOException $e) {
                 Utils::addErrorMessage("Błąd podczas pobierania danych uzytkownika do edycji " . $e->getMessage());
@@ -170,17 +191,24 @@ class UserCtrl {
 
         if ($id) {
             try {
-                App::getDB()->pdo->beginTransaction();
+                $user = App::getDB()->get("user", "*", ["id" => $id]);
 
-                App::getDB()->delete("user_account_role", [
-                    "user_account_id" => $id
-                ]);
-    
-                App::getDB()->delete("user_account", [
-                    "id" => $id
-                ]);
-    
-                App::getDB()->pdo->commit();
+                if ($user["login"] != "superadmin") {
+                    App::getDB()->pdo->beginTransaction();
+
+                    App::getDB()->delete("user_account_role", [
+                        "user_account_id" => $id
+                    ]);
+        
+                    App::getDB()->delete("user_account", [
+                        "id" => $id
+                    ]);
+        
+                    App::getDB()->pdo->commit();
+                } else {
+                    Utils::addErrorMessage("Nie mozna usunąć administratora systemu");
+                }
+
             } catch (\PDOException $e){
                 App::getDB()->pdo->rollBack();
                 Utils::addErrorMessage("Nie udało się usunąć użytkownika. " . $e->getMessage());
@@ -228,6 +256,8 @@ class UserCtrl {
                 "login",
                 "first_name",
                 "last_name"   
+            ], [
+                "ORDER" => "id"
             ]);
         } catch (\PDOException $e) {
             Utils::addErrorMessage("Błąd pobierania listy uzytkownikow " . $e->getMessage());

@@ -24,13 +24,12 @@ CREATE TABLE user_account_role (
 
 -- Data
 INSERT INTO user_account(login, first_name, last_name, password)
-VALUES ('admin', 'Arbuzz', 'Watermelone', 'test1'),
-('tester1', 'Rick', 'Rickardo', 'test2');
+VALUES ('superadmin', 'SuperAdmin', 'SuperAdmin', 'test1');
 
 INSERT INTO role(name)
 VALUES ('Admin'),
 ('Tester');
 
 INSERT INTO user_account_role(user_account_id, role_id)
-VALUES ((SELECT id FROM user_account WHERE login = 'admin'), (SELECT id FROM role WHERE name = 'Admin')),
-((SELECT id FROM user_account WHERE login = 'tester1'), (SELECT id FROM role WHERE name = 'Tester'));
+SELECT (SELECT id FROM user_account WHERE login = 'superadmin'), id
+FROM role;

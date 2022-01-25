@@ -7,15 +7,15 @@
             <input type="hidden" name="id" value="{$form->id}">
             <div class="mb-3">
             <label for="login_id" class="form-label">Login</label>
-                <input type="text" class="form-control" id="login_id" name="login" value="{$form->login}">
+                <input type="text" class="form-control" id="login_id" name="login" value="{$form->login}" {if $form->login == "superadmin"}readonly{/if}>
             </div>
             <div class="mb-3">
                 <label for="first_name_id" class="form-label">Imię</label>
-                <input type="text" class="form-control" id="first_name_id" name="first_name" value="{$form->firstName}">
+                <input type="text" class="form-control" id="first_name_id" name="first_name" value="{$form->firstName}" {if $form->login == "superadmin"}readonly{/if}>
             </div>
             <div class="mb-3">
                 <label for="last_name_id" class="form-label">Nazwisko</label>
-                <input type="text" class="form-control" id="last_name_id" name="last_name" value="{$form->lastName}">
+                <input type="text" class="form-control" id="last_name_id" name="last_name" value="{$form->lastName}" {if $form->login == "superadmin"}readonly{/if}>
             </div>
             <div class="mb-3">
                 <label for="password_id" class="form-label" aria-describedby="passwordHelp">Hasło</label>
@@ -25,7 +25,8 @@
             <div class="mb-1">Rola:</div>
             {foreach $roles as $role}
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="{$role}" id="{$role}" name="role_{$role}" {if in_array($role, $form->roles)}checked{/if}>
+                    <input class="form-check-input" type="checkbox" value="{$role}" id="{$role}" name="role_{$role}" {if in_array($role, $form->roles) || ($form->login == "superadmin")}checked{/if} {if $form->login == "superadmin"}disabled{/if}>
+                    {if $form->login == "superadmin"}<input type="hidden" name="role_{$role}" value="{$role}" />{/if}
                     <label class="form-check-label" for="{$role}">{$role}</label>
                 </div>
             {/foreach}
