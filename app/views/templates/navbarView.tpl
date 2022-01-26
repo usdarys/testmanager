@@ -9,7 +9,7 @@
 	  	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				<li class="nav-item">
-					<a href="{url action="hello"}" class="nav-link">Hello</a>
+					<a href="{url action="testRunList"}" class="nav-link">Przebiegi testów</a>
 				</li>
 				<li class="nav-item">
 					<a href="{url action="testCaseList"}" class="nav-link">Przypadki testowe</a>

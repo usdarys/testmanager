@@ -15,7 +15,7 @@
             </div>
             <div class="mb-3">
                 <label for="steps_id" class="form-label">Kroki</label>
-                <textarea class="form-control" id="steps_id" rows="3" name="steps">{$form->steps}</textarea>
+                <textarea class="form-control" id="steps_id" rows="6" name="steps">{$form->steps}</textarea>
             </div>
             <div class="mb-3">
                 <label for="expected_result_id" class="form-label">Oczekiwany rezultat</label>
