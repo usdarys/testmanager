@@ -16,3 +16,4 @@ Utils::addRoute('testCaseList', 'TestCaseCtrl', ['Admin']);
 Utils::addRoute('testCaseSave', 'TestCaseCtrl', ['Admin']);
 Utils::addRoute('testRunList', 'TestRunCtrl', ['Admin']);
 Utils::addRoute('testRunSave', 'TestRunCtrl', ['Admin']);
+Utils::addRoute('testResultList', 'TestResultCtrl', ['Admin']);

@@ -20,7 +20,7 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Nazwa</th>
-                {* <th scope="col"></th> *}
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -28,10 +28,12 @@
             <tr>
                 <th scope="row">{$testRun["id"]}</th>
                 <td>{$testRun["name"]}</td>
-                {* <td class="d-flex justify-content-end">
-                    <a href="{url action="testRunUpdate" id=$testRun["id"]}" class="btn btn-sm btn-outline-secondary me-2">Edytuj</a>
-                    <a href="{url action="testRunDelete" id=$testRun["id"]}" class="btn btn-sm btn-outline-danger">Usuń</a>
-                </td> *}
+                <th></td>
+                <td class="d-flex justify-content-end">
+                    <a href="{url action="testResultList" testRunId=$testRun["id"]}" class="btn btn-sm btn-outline-success me-2">Otwórz ></a>
+                    {* <a href="{url action="testRunUpdate" id=$testRun["id"]}" class="btn btn-sm btn-outline-secondary me-2">Edytuj</a>
+                    <a href="{url action="testRunDelete" id=$testRun["id"]}" class="btn btn-sm btn-outline-danger">Usuń</a> *}
+                </td>
             </tr>
         {/foreach}
         </tbody>
