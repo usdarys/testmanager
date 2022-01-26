@@ -9,8 +9,8 @@
         </ul>
         <h4 class="border-bottom mb-3 mt-3">{$testRun["name"]}</h4>
         <p>{$testRun["description"]}</p>
-        <h6 class="mb-3 mt-3">Przypadki testowe ({$testRunStats["tested"]}/{$testRunStats["all"]}):</h6>
         {include file="messages.tpl"}
+        <h6 class="mb-3 mt-3">Przypadki testowe ({$testRunStats["tested"]}/{$testRunStats["all"]}):</h6>
         {* <ul class="nav mb-3 mt-3">
             <li class="nav-item">
                 <a href="{url action="testResultSave"}" class="btn btn-success">Dodaj</a>
@@ -55,10 +55,9 @@
                         <span class="badge bg-secondary">{$testResult["status"]}</span>
                     {/if}
                 </td>
-                {* <td class="d-flex justify-content-end">
-                    <a href="{url action="testResultUpdate" id=$testResult["id"]}" class="btn btn-sm btn-outline-secondary me-2">Edytuj</a>
-                    <a href="{url action="testResultDelete" id=$testResult["id"]}" class="btn btn-sm btn-outline-danger">Usuń</a>
-                </td>*}
+                <td class="d-flex justify-content-end">
+                    <a href="{url action="testResultUpdate" testRunId=$testRun["id"] testCaseId=$testResult["id"]}" class="btn btn-sm btn-outline-secondary me-2">Otworz ></a>
+                </td>
             </tr>
         {/foreach}
         </tbody>

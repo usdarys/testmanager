@@ -30,7 +30,7 @@
                 <td>{$testRun["name"]}</td>
                 <th></td>
                 <td class="d-flex justify-content-end">
-                    <a href="{url action="testResultList" testRunId=$testRun["id"]}" class="btn btn-sm btn-outline-success me-2">Otwórz ></a>
+                    <a href="{url action="testResultList" testRunId=$testRun["id"]}" class="btn btn-sm btn-outline-secondary me-2">Otwórz ></a>
                     {* <a href="{url action="testRunUpdate" id=$testRun["id"]}" class="btn btn-sm btn-outline-secondary me-2">Edytuj</a>
                     <a href="{url action="testRunDelete" id=$testRun["id"]}" class="btn btn-sm btn-outline-danger">Usuń</a> *}
                 </td>
