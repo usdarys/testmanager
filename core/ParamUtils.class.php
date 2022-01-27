@@ -3,6 +3,7 @@
 namespace core;
 
 use core\Message;
+use core\Validator;
 
 /**
  * Wrapper for basic parameter utils
@@ -44,4 +45,16 @@ class ParamUtils {
         return self::getFrom($_SESSION, $param_name, $required, $required_message, $index);
     }
 
+    public static function getResourceIdFromCleanURL($paramNumber) {
+        $v = new Validator();
+        $id = $v->validateFromCleanURL($paramNumber, [
+            "required" => true,
+            "int" => true,
+            "min" => 1
+        ]);
+        if ($v->isLastOK()) {
+            return $id;
+        }
+        return;
+    }
 }

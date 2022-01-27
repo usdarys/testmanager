@@ -157,7 +157,7 @@ class UserCtrl {
     }
 
     public function action_userUpdate() {
-        $id = $this->getResourceId();
+        $id = ParamUtils::getResourceIdFromCleanURL(1);
 
         if ($id) {
             try {
@@ -187,7 +187,7 @@ class UserCtrl {
     }
 
     public function action_userDelete() { 
-        $id = $this->getResourceId();
+        $id = ParamUtils::getResourceIdFromCleanURL(1);
 
         if ($id) {
             try {
@@ -220,21 +220,6 @@ class UserCtrl {
         }
 
         App::getRouter()->forwardTo("userList");
-    }
-
-    private function getResourceId() {
-        $v = new Validator();
-        $id = $v->validateFromCleanURL(1, [
-            "required" => true,
-            "required_message" => "Brak id",
-            "int" => true,
-            "min" => 1,
-            "validator_message" => "Nieprawidlowe id"
-        ]);
-        if ($v->isLastOK()) {
-            return $id;
-        }
-        return;
     }
 
     private function generateFormView() {

@@ -9,7 +9,8 @@
         </ul>
         <h4 class="border-bottom mb-3 mt-3">{$form->testCaseName}</h4>
         <form action="{url action="testResultSave"}"  method="post" class="mb-3">
-            {* <input type="hidden" name="id" value="{$form->id}"> *}
+            <input type="hidden" name="test_run_id" value="{$form->testRunId}">
+            <input type="hidden" name="test_case_id" value="{$form->testCaseId}">
             <div class="mb-3">
                 <label for="test_case_preconditions_id" class="form-label">Warunki wstepne</label>
                 <textarea class="form-control" id="test_case_preconditions_id" rows="3" name="test_case_preconditions" readonly>{$form->testCasePreconditions}</textarea>
