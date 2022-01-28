@@ -78,4 +78,11 @@ class Utils {
         return App::getConf()->action_root . self::_url_maker_noclean($action, $params);
     }
     
+    public static function setLoggedUser($user) {
+        $_SESSION["_logged_user"] = $user;
+    }
+
+    public static function getLoggedUser() {
+        return $_SESSION["_logged_user"];
+    }
 }

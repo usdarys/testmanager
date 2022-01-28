@@ -4,7 +4,7 @@
 <main>
 	<div class="container d-flex align-items-center login-form">
 		<form action="{url action="login"}"  method="post" class="w-100">
-			<legend class="text-center mb-4">Logowanie</legend>
+			<legend class="text-center mb-4">Test Manager</legend>
 			<fieldset>
 				<div class="mb-3">
 					<label for="id_login" class="visually-hidden">Login: </label>

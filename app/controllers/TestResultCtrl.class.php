@@ -20,19 +20,17 @@ class TestResultCtrl {
 
     public function action_testResultSave() {
         if ($this->validateForm()) {
-            $userId = 1; // pobierz ID aktualnego usera -> wyciagnac to z sesji. Zapisac se go przy logowaniu
-            $date = "aktualna data"; // todo
-
+            date_default_timezone_set("Europe/Warsaw");
             try {
                 App::getDB()->update("test_result", [
-                    "user_account_id" => $userId,
-                    "date_run" => $date,
+                    "user_account_id" => Utils::getLoggedUser()["id"],
+                    "date_run" => date('Y-m-d H:i:s'),
                     "status" => $this->form->status,
                     "comment" => $this->form->comment
                 ], [
                     "AND" => [
                         "test_run_id" => $this->form->testRunId,
-                        "test_case_id" => $$this->form->testCaseId
+                        "test_case_id" => $this->form->testCaseId
                     ] 
                 ]);
             } catch (\PDOException $e) {
@@ -41,8 +39,9 @@ class TestResultCtrl {
         }
         if (App::getMessages()->isError()) {
             $this->generateFormView();
+        } else {
+            App::getRouter()->redirectTo("testResultList/" . $this->form->testRunId);
         }
-        App::getRouter()->forwardTo("testResultList");
     }
 
     private function validateForm() {
@@ -111,6 +110,7 @@ class TestResultCtrl {
     }
 
     private function generateFormView() {
+        App::getSmarty()->assign('statusList', TestResultStatusType::getList());
         App::getSmarty()->assign('form', $this->form);
         App::getSmarty()->display('testResultForm.tpl');
     }

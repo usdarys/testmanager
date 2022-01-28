@@ -257,6 +257,7 @@ class UserCtrl {
             Utils::addErrorMessage("Błąd pobierania listy uzytkownikow " . $e->getMessage());
         }
 
+        App::getSmarty()->assign("loggedUser", Utils::getLoggedUser()["login"]);
         App::getSmarty()->assign('search', $search);
         App::getSmarty()->assign('userList', $userList);
         App::getSmarty()->display('userList.tpl');

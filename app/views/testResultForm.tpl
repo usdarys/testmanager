@@ -23,13 +23,14 @@
                 <label for="test_case_expected_result_id" class="form-label">Oczekiwany rezultat</label>
                 <textarea class="form-control" id="test_case_expected_result_id" rows="3" name="test_case_expected_result" readonly>{$form->testCaseExpectedResult}</textarea>
             </div>
-            {* <select class="form-select">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select> *}
-            <div>Status: {$form->status}</div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" name="status">
+                    {foreach $statusList as $s}
+                        <option value={$s} {if $s == $form->status}selected{/if} class="dropdown-item">{$s}</option>
+                    {/foreach}
+                </select>
+            </div>
             <div class="mb-3">
                 <label for="comment_id" class="form-label">Komentarz</label>
                 <textarea class="form-control" id="comment_id" rows="3" name="comment">{$form->comment}</textarea>

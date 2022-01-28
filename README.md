@@ -10,7 +10,6 @@
 - uporzadkowa uprawnienia
 - dodac diagram ERD
 - dodac mozliwosc wyboru przypadkow do test run'a
-- zabezpieczyc zmiane hasla superadmina przez innego usera
 - dodac sortery (asc & desc) oraz wybór pola
 - dodac filtr po roli
 - dodac wylaczanie alertow

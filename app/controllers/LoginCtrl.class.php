@@ -18,7 +18,12 @@ class LoginCtrl {
 
     public function action_login() {
         if ($this->validateForm()) {
-            $user = App::getDB()->get("user_account", "*", [
+            $user = App::getDB()->get("user_account", [
+                "id",
+                "login",
+                "first_name",
+                "last_name"
+            ], [
                 "AND" => [
                     "login" => $this->form->login,
                     "password" => $this->form->password
@@ -26,6 +31,8 @@ class LoginCtrl {
             ]);
 
             if (!empty($user)) {
+                Utils::setLoggedUser($user);
+
                 $roles = App::getDB()->select("role", [
                         "[><]user_account_role" => ["id" => "role_id"]
                     ], [
@@ -38,7 +45,7 @@ class LoginCtrl {
                 foreach ($roles as $role) {
                     RoleUtils::addRole($role["name"]);
                 }
-                App::getRouter()->redirectTo("hello");
+                App::getRouter()->redirectTo("testRunList");
             } else {
                 Utils::addErrorMessage("Nieprawidłowe dane logowania");
                 $this->generateView();

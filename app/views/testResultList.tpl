@@ -28,7 +28,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">Nazwa</th>
                 <th scope="col">Wykonawca</th>
-                <th scope="col">Data wykonania</th>
+                <th scope="col">Data aktualizacji</th>
                 <th scope="col">Status</th>
                 {* <th scope="col"></th> *}
             </tr>
