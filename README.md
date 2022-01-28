@@ -4,9 +4,8 @@
 1. Skopiuj plik `./resource/config/config.php` do katalogu głównego aplikacji i uzupełnij dane połączeniowe do bazy
 2. W katalogu `./public` wykonaj
 
-        npm -i
+        npm i
 ## TODO
-- dokonczyc zapisywanie wynikow (funkcjonalnośc oraz poprawa styli)
 - uporzadkowa uprawnienia
 - dodac diagram ERD
 - dodac mozliwosc wyboru przypadkow do test run'a

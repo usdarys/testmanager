@@ -15,11 +15,12 @@
                 </form>
             </li>
         </ul>
-        <table class="table table-striped align-middle">
+        <table class="table table-hover bg-light align-middle">
         <thead>
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Nazwa</th>
+                <th scope="col">Data utworzenia</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -27,10 +28,10 @@
         {foreach $testRunList as $testRun}
             <tr>
                 <th scope="row">{$testRun["id"]}</th>
-                <td>{$testRun["name"]}</td>
-                <th></td>
+                <td><a href="{url action="testResultList" testRunId=$testRun["id"]}" class="text-decoration-none">{$testRun["name"]}</a></td>
+                <td class="fw-normal text-muted">{$testRun["date_created"]}</td>
                 <td class="d-flex justify-content-end">
-                    <a href="{url action="testResultList" testRunId=$testRun["id"]}" class="btn btn-sm btn-outline-secondary me-2">Otwórz ></a>
+                    <a href="{url action="testResultList" testRunId=$testRun["id"]}" class="text-decoration-none">></a>
                     {* <a href="{url action="testRunUpdate" id=$testRun["id"]}" class="btn btn-sm btn-outline-secondary me-2">Edytuj</a>
                     <a href="{url action="testRunDelete" id=$testRun["id"]}" class="btn btn-sm btn-outline-danger">Usuń</a> *}
                 </td>

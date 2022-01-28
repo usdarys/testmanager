@@ -45,9 +45,11 @@ class TestRunCtrl {
             try {
                 App::getDB()->pdo->beginTransaction();
                 if (empty($this->form->id)) {
+                    date_default_timezone_set("Europe/Warsaw");
                     App::getDB()->insert("test_run", [
                         "name" => $this->form->name,
-                        "description" => $this->form->description
+                        "description" => $this->form->description,
+                        "date_created" => date('Y-m-d H:i:s')
                     ]);
 
                     $this->form->id = App::getDB()->id();
@@ -94,6 +96,7 @@ class TestRunCtrl {
             $testRunList = App::getDB()->select("test_run", [
                 "id",
                 "name",
+                "date_created"
             ], $where);
         } catch (\PDOException $e) {
             Utils::addErrorMessage("Błąd pobierania listy przebiegów testów " . $e->getMessage());

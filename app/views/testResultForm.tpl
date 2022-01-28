@@ -12,6 +12,18 @@
             <input type="hidden" name="test_run_id" value="{$form->testRunId}">
             <input type="hidden" name="test_case_id" value="{$form->testCaseId}">
             <div class="mb-3">
+                <h6>Warunki wstepne</h6>
+                <p style="white-space: pre-line;" class="p-3 border rounded bg-light">{if !empty($form->testCasePreconditions)}{$form->testCasePreconditions}{else}-{/if}</p>
+            </div>
+            <div class="mb-3">
+                <h6>Kroki</h6>
+                <p style="white-space: pre-line;" class="p-3 border rounded bg-light">{$form->testCaseSteps}</p>
+            </div>
+            <div class="mb-3">
+                <h6>Oczekiwany rezultat</h6>
+                <p style="white-space: pre-line;" class="p-3 border rounded bg-light">{$form->testCaseExpectedResult}</p>
+            </div>
+            {* <div class="mb-3">
                 <label for="test_case_preconditions_id" class="form-label">Warunki wstepne</label>
                 <textarea class="form-control" id="test_case_preconditions_id" rows="3" name="test_case_preconditions" readonly>{$form->testCasePreconditions}</textarea>
             </div>
@@ -22,8 +34,8 @@
             <div class="mb-3">
                 <label for="test_case_expected_result_id" class="form-label">Oczekiwany rezultat</label>
                 <textarea class="form-control" id="test_case_expected_result_id" rows="3" name="test_case_expected_result" readonly>{$form->testCaseExpectedResult}</textarea>
-            </div>
-            <div class="mb-3">
+            </div> *}
+            <div class="mb-3 w-25">
                 <label for="status" class="form-label">Status</label>
                 <select class="form-select" id="status" name="status">
                     {foreach $statusList as $s}

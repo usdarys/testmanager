@@ -22,7 +22,7 @@
                 </form>
             </li>
         </ul> *}
-        <table class="table table-striped align-middle">
+        <table class="table table-hover bg-light align-middle">
         <thead>
             <tr>
                 <th scope="col">ID</th>
@@ -37,15 +37,15 @@
         {foreach $testResultList as $testResult}
             <tr>
                 <th scope="row">{$testResult["id"]}</th>
-                <td>{$testResult["name"]}</td>
-                <td>
+                <td><a href="{url action="testResultUpdate" testRunId=$testRun["id"] testCaseId=$testResult["id"]}" class="text-decoration-none">{$testResult["name"]}</a></td>
+                <td class="fw-normal text-muted">
                     {if isset($testResult["first_name"]) && isset($testResult["last_name"])}
                         {$testResult["first_name"]} {$testResult["last_name"]}
                     {else}
                         -
                     {/if}
                 </td>
-                <td>{if isset($testResult["date_run"])}{$testResult["date_run"]}{else}-{/if}</td>
+                <td class="fw-normal text-muted">{if isset($testResult["date_run"])}{$testResult["date_run"]}{else}-{/if}</td>
                 <td>
                     {if $testResult["status"] == \app\types\TestResultStatusType::FAILED}
                         <span class="badge bg-danger">{$testResult["status"]}</span>
@@ -56,7 +56,7 @@
                     {/if}
                 </td>
                 <td class="d-flex justify-content-end">
-                    <a href="{url action="testResultUpdate" testRunId=$testRun["id"] testCaseId=$testResult["id"]}" class="btn btn-sm btn-outline-secondary me-2">Otworz ></a>
+                    <a href="{url action="testResultUpdate" testRunId=$testRun["id"] testCaseId=$testResult["id"]}" class="text-decoration-none">></a>
                 </td>
             </tr>
         {/foreach}

@@ -32,7 +32,8 @@ CREATE TABLE test_case (
 CREATE TABLE test_run (
     id serial PRIMARY KEY,
     name TEXT,
-    description TEXT
+    description TEXT,
+    date_created TIMESTAMP
 );
 
 CREATE TABLE test_result (
