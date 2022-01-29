@@ -56,7 +56,7 @@ VALUES ('superadmin', 'SuperAdmin', 'SuperAdmin', 'test1');
 
 INSERT INTO role(name)
 VALUES ('Admin'),
-('Test Leader')
+('Test Leader'),
 ('Tester');
 
 INSERT INTO user_account_role(user_account_id, role_id)
