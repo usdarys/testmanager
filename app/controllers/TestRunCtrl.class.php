@@ -8,6 +8,7 @@ use core\Utils;
 use core\App;
 use core\ParamUtils;
 use core\Validator;
+use core\ArrayUtils;
 
 class TestRunCtrl {
 
@@ -21,6 +22,8 @@ class TestRunCtrl {
         $this->form->id = ParamUtils::getFromPost('id');
         $this->form->name = ParamUtils::getFromPost('name');
         $this->form->description = htmlspecialchars(ParamUtils::getFromPost('description'));
+        $this->form->caseIncludeType = ParamUtils::getFromPost("case_include_type");
+        $this->form->selectedTestCases = ArrayUtils::preg_grep_keys('/^tc_/', $_POST);
 
         if (!isset($this->form->name) || !isset($this->form->description)) {
             return false;
@@ -32,6 +35,10 @@ class TestRunCtrl {
             'required' => true,
             'required_message' => "Uzupełnij nazwę"
         ]);
+
+        if ($this->form->caseIncludeType == "selected" && empty($this->form->selectedTestCases)) {
+            Utils::addErrorMessage("Nie wybrano przypadków testowych");
+        }
 
         if (App::getMessages()->isError()) {
             return false;
@@ -54,10 +61,17 @@ class TestRunCtrl {
 
                     $this->form->id = App::getDB()->id();
 
+                    if ($this->form->caseIncludeType == "selected") {
+                        $where = 'id IN (' . implode(', ', $this->form->selectedTestCases) . ')';
+                    } else {
+                        $where = "1 = 1";
+                    }
+
                     App::getDB()->query('
                         INSERT INTO test_result (test_run_id, test_case_id, status)
                         SELECT ' . $this->form->id . ', id, \'' . TestResultStatusType::UNTESTED . '\'
-                        FROM test_case;
+                        FROM test_case
+                        WHERE ' . $where . ';
                     ');
     
                     Utils::addInfoMessage("Dodano przebieg testów");
@@ -78,6 +92,16 @@ class TestRunCtrl {
  
     
     private function generateFormView() {
+        try {
+            $testCaseList = App::getDB()->select("test_case", [
+                "id",
+                "name"
+            ]);
+        } catch (\PDOException $e) {
+            Utils::addErrorMessage("Błąd pobierania listy przypadkow testowych " . $e->getMessage());
+        }
+
+        App::getSmarty()->assign('testCaseList', $testCaseList);
         App::getSmarty()->assign('form', $this->form);
         App::getSmarty()->display('testRunForm.tpl');
     }

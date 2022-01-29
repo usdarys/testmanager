@@ -7,7 +7,6 @@
         npm i
 ## TODO
 - dodac diagram ERD
-- dodac mozliwosc wyboru przypadkow do test run'a
 - dodac sortery (asc & desc) oraz wybór pola
 - dodac filtr po roli
 - dodac wylaczanie alertow
