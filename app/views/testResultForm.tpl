@@ -23,23 +23,11 @@
                 <h6>Oczekiwany rezultat</h6>
                 <p style="white-space: pre-line;" class="p-3 border rounded bg-light">{$form->testCaseExpectedResult}</p>
             </div>
-            {* <div class="mb-3">
-                <label for="test_case_preconditions_id" class="form-label">Warunki wstepne</label>
-                <textarea class="form-control" id="test_case_preconditions_id" rows="3" name="test_case_preconditions" readonly>{$form->testCasePreconditions}</textarea>
-            </div>
-            <div class="mb-3">
-                <label for="test_case_steps_id" class="form-label">Kroki</label>
-                <textarea class="form-control" id="test_case_steps_id" rows="6" name="test_case_steps" readonly>{$form->testCaseSteps}</textarea>
-            </div>
-            <div class="mb-3">
-                <label for="test_case_expected_result_id" class="form-label">Oczekiwany rezultat</label>
-                <textarea class="form-control" id="test_case_expected_result_id" rows="3" name="test_case_expected_result" readonly>{$form->testCaseExpectedResult}</textarea>
-            </div> *}
             <div class="mb-3 w-25">
                 <label for="status" class="form-label">Status</label>
                 <select class="form-select" id="status" name="status">
                     {foreach $statusList as $s}
-                        <option value={$s} {if $s == $form->status}selected{/if} class="dropdown-item">{$s}</option>
+                        <option value={$s} {if $s == $form->status}selected{/if}>{$s}</option>
                     {/foreach}
                 </select>
             </div>

@@ -8,9 +8,21 @@
             </li>       
         </ul>
         <h4 class="border-bottom mb-3 mt-3">{$testRun["name"]}</h4>
-        <p>{$testRun["description"]}</p>
+        <p class="p-3 border rounded bg-light">{$testRun["description"]}</p>
         {include file="messages.tpl"}
-        <h6 class="mb-3 mt-3">Przypadki testowe ({$testRunStats["tested"]}/{$testRunStats["all"]}):</h6>
+        <ul class="list-group list-group-flush mb-3 mt-3">
+            <li class="list-group-item border-0 d-flex justify-content-center">Wykonane: {$testRunStats["tested"]} / {$testRunStats["all"]}&nbsp;<span class="text-muted"> ({100 - $testRunStats["untested_percent"]}%)</span></li>       
+            <li class="list-group-item border-0 d-flex justify-content-center">Zaliczone: {$testRunStats["passed"]}&nbsp;<span class="text-muted"> ({$testRunStats["passed_percent"]}%)</span></li>
+            <li class="list-group-item border-0 d-flex justify-content-center">Niezaliczone: {$testRunStats["failed"]}&nbsp;<span class="text-muted"> ({$testRunStats["failed_percent"]}%)</span></li>
+        </ul>
+        <div class="progress">
+            <div class="progress-bar bg-success" role="progressbar" style="width: {$testRunStats["passed_percent"]}%"></div>
+            <div class="progress-bar bg-danger" role="progressbar" style="width: {$testRunStats["failed_percent"]}%"></div>
+            <div class="progress-bar bg-secondary" role="progressbar" style="width: {$testRunStats["untested_percent"]}%"></div>
+        </div>
+
+
+        <h6 class="mb-3 mt-5">Przypadki testowe:</h6>
         {* <ul class="nav mb-3 mt-3">
             <li class="nav-item">
                 <a href="{url action="testResultSave"}" class="btn btn-success">Dodaj</a>

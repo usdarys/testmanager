@@ -108,24 +108,36 @@ class TestRunCtrl {
 
     public function action_testRunList() {
 
+        $dateSorter = ParamUtils::getFromPost("date_sorter");
+        if (!$dateSorter || $dateSorter == "desc") {
+            $order = 'DESC';
+        } else {
+            $order = 'ASC';
+        }
+
         $search = ParamUtils::getFromPost("search");
-        $where["ORDER"] = "id";
         if (isset($search) && strlen($search) > 0) {
-            $where["OR"] = [
-                "name[~]" => $search
-            ];
+            $where = 'trun.name ILIKE \'%' . $search . '%\'';
+        } else {
+            $where = '1 = 1';
         }
 
         try {
-            $testRunList = App::getDB()->select("test_run", [
-                "id",
-                "name",
-                "date_created"
-            ], $where);
+            $testRunList = App::getDB()->query('
+                SELECT 
+                trun.id, trun.name, trun.date_created, 
+                COUNT(tres.test_case_id) FILTER (WHERE tres.status != \'' . TestResultStatusType::UNTESTED . '\') AS "tested",
+                COUNT(tres.test_case_id) AS "all"
+                FROM test_run trun JOIN test_result tres ON trun.id = tres.test_run_id
+                WHERE ' . $where . '
+                GROUP BY trun.id
+                ORDER BY trun.date_created ' . $order . ';
+            ');
         } catch (\PDOException $e) {
             Utils::addErrorMessage("Błąd pobierania listy przebiegów testów " . $e->getMessage());
         }
 
+        App::getSmarty()->assign('dateSorter', $dateSorter);
         App::getSmarty()->assign('search', $search);
         App::getSmarty()->assign('testRunList', $testRunList);
         App::getSmarty()->display('testRunList.tpl');

@@ -5,10 +5,3 @@
 2. W katalogu `./public` wykonaj
 
         npm i
-## TODO
-- dodac diagram ERD
-- dodac sortery (asc & desc) oraz wybór pola
-- dodac filtr po roli
-- dodac wylaczanie alertow
-- modal na potwierdzenie usunięcia itemków
-- statystyki run'a -> na liście oraz w dashboardzie

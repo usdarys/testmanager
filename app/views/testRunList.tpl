@@ -16,6 +16,15 @@
                     <button class="btn btn-outline-success btn-sm" type="submit">Szukaj</button>
                 </form>
             </li>
+            <li>
+                <form class="d-flex ms-3" action="{url action="testRunList"}" method="POST" >
+                <select class="form-select me-2" id="date_sorter" name="date_sorter">
+                    <option value="desc" {if !$dateSorter || $dateSorter == "desc"}selected{/if}>od najnowszych</option>
+                    <option value="asc" {if $dateSorter == "asc"}selected{/if}>od najstarszych</option>
+                </select>
+                <button class="btn btn-outline-success btn-sm" type="submit">Sortuj</button>
+                </form>
+            </li>
         </ul>
         <table class="table table-hover bg-light align-middle">
         <thead>
@@ -23,6 +32,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">Nazwa</th>
                 <th scope="col">Data utworzenia</th>
+                <th scope="col">Wykonane testy</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -32,6 +42,7 @@
                 <th scope="row">{$testRun["id"]}</th>
                 <td><a href="{url action="testResultList" testRunId=$testRun["id"]}" class="text-decoration-none">{$testRun["name"]}</a></td>
                 <td class="fw-normal text-muted">{$testRun["date_created"]}</td>
+                <td class="fw-normal text-muted">{$testRun["tested"]} / {$testRun["all"]} ({round(($testRun["tested"]*100)/$testRun["all"], 2)}%)</td>
                 <td class="d-flex justify-content-end">
                     <a href="{url action="testResultList" testRunId=$testRun["id"]}" class="text-decoration-none">></a>
                     {* <a href="{url action="testRunUpdate" id=$testRun["id"]}" class="btn btn-sm btn-outline-secondary me-2">Edytuj</a>

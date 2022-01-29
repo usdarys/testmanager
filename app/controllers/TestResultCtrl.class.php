@@ -153,18 +153,28 @@ class TestResultCtrl {
         $testRunStats = [
             "all" => count($testResultList),
             "tested" => 0,
+            "untested" => 0,
             "passed" => 0,
-            "failed" => 0
+            "failed" => 0,
+            "untested_percent" => 0,
+            "passed_percent" => 0,
+            "failed_percent" => 0
         ];
         foreach($testResultList as $r) {
-            if ($r["status"] != TestResultStatusType::UNTESTED) {
-                $testRunStats["tested"]++;
-            } elseif ($r["status"] != TestResultStatusType::PASSED) {
+            if ($r["status"] == TestResultStatusType::UNTESTED) {
+                $testRunStats["untested"]++;
+            } elseif ($r["status"] == TestResultStatusType::PASSED) {
                 $testRunStats["passed"]++;
-            } elseif ($r["status"] != TestResultStatusType::FAILED) {
+            } elseif ($r["status"] == TestResultStatusType::FAILED) {
                 $testRunStats["failed"]++;
             }
         }
+
+        $testRunStats["tested"] = $testRunStats["passed"] + $testRunStats["failed"];
+        $testRunStats["untested_percent"] = round(($testRunStats["untested"]*100)/$testRunStats["all"], 2);
+        $testRunStats["passed_percent"] = round(($testRunStats["passed"]*100)/$testRunStats["all"], 2);
+        $testRunStats["failed_percent"] = round(($testRunStats["failed"]*100)/$testRunStats["all"], 2);
+
         return $testRunStats;
     }
 
