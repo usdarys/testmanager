@@ -137,7 +137,8 @@ class TestResultCtrl {
                 "test_result.date_run",
                 "test_result.status"
             ], [
-                "test_result.test_run_id" => $this->testRun["id"]
+                "test_result.test_run_id" => $this->testRun["id"],
+                "ORDER" => "test_case.id"
             ]);
         } catch (\PDOException $e) {
             Utils::addErrorMessage("Błąd pobierania listy rezultatów " . $e->getMessage());
