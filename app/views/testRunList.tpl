@@ -5,9 +5,11 @@
         <h4 class="border-bottom mb-3 mt-3">Przebiegi testów</h4>
         {include file="messages.tpl"}
         <ul class="nav mb-3 mt-3">
-            <li class="nav-item">
-                <a href="{url action="testRunSave"}" class="btn btn-success">Dodaj</a>
-            </li>
+            {if \core\RoleUtils::inRoles(["Admin", "Test Leader"])} 
+                <li class="nav-item">
+                    <a href="{url action="testRunSave"}" class="btn btn-success">Dodaj</a>
+                </li>
+            {{/if}}
             <li>
                 <form class="d-flex ms-3" action="{url action="testRunList"}" method="POST" >
                     <input class="form-control me-2" type="search" name="search" aria-label="Search" value="{$search}">

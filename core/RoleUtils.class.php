@@ -25,6 +25,19 @@ class RoleUtils {
         return isset(App::getConf()->roles[$role]);
     }
 
+    public static function inRoles($roles) {
+        $found = false;
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                if (RoleUtils::inRole($role)) {
+                    $found = true;
+                    break;
+                }
+            }
+        };
+        return $found;
+    }
+
     public static function requireRole($role, $fail_action = null) {
         if (!self::inRole($role)) {
             if (isset($fail_action))

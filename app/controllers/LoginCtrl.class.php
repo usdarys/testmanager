@@ -88,4 +88,8 @@ class LoginCtrl {
         App::getSmarty()->assign("form", $this->form);
         App::getSmarty()->display("login.tpl");
     }
+
+    public function action_noAccess() {
+        App::getSmarty()->display("noAccess.tpl");
+    }
 }

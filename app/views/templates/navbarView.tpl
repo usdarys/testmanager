@@ -11,9 +11,11 @@
 				<li class="nav-item">
 					<a href="{url action="testRunList"}" class="nav-link">Przebiegi testów</a>
 				</li>
-				<li class="nav-item">
-					<a href="{url action="testCaseList"}" class="nav-link">Przypadki testowe</a>
-				</li>
+				{if \core\RoleUtils::inRoles(["Admin", "Test Leader"])} 
+					<li class="nav-item">
+						<a href="{url action="testCaseList"}" class="nav-link">Przypadki testowe</a>
+					</li>
+				{/if}
 				{if \core\RoleUtils::inRole("Admin")} 
 					<li class="nav-item">
 						<a class="nav-link" href="{url action="userList"}">Użytkownicy</a>
